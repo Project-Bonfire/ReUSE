@@ -1,0 +1,5 @@
+.directory
+tmp/simul_temp/transcript
+tmp/simul_temp/vsim.wlf
+tmp/simul_temp/wave.vcd
+tmp/simul_temp/work
