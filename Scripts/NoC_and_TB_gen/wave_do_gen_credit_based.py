@@ -80,6 +80,12 @@ for i in range(0 , network_dime_x*network_dime_y):
 	wave_file.write("add wave -noupdate -group {fault_sigs} :"+tb_name+":NoC:R_"+str(i)+":fault_out_W\n")
 	wave_file.write("add wave -noupdate -group {fault_sigs} :"+tb_name+":NoC:R_"+str(i)+":fault_out_S\n")
 	wave_file.write("add wave -noupdate -group {fault_sigs} :"+tb_name+":NoC:R_"+str(i)+":fault_out_L\n")
+
+for i in range(0 , network_dime_x*network_dime_y):
+	for direction in ["N", "E", "W", "S"]:
+		for num in [1,2,3,4]:
+			wave_file.write("add wave -noupdate -group {FIFO"+str(i)+"} :"+tb_name+":NoC:R_"+str(i)+":FIFO_"+direction+":FIFO_MEM_"+str(num)+"\n")
+
 wave_file.write("add wave -noupdate -group {NoC Full_Sigs} :"+tb_name+":clk\n")
 
 wave_file.write("TreeUpdate [SetDefaultTree]\n")

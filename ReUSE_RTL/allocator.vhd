@@ -73,6 +73,7 @@ end component;
 component arbiter_out is
     port (  reset: in  std_logic;
             clk: in  std_logic;
+            fault_in: in std_logic;
             X_N_Y, X_E_Y, X_W_Y, X_S_Y, X_L_Y:in std_logic; -- From LBDR modules
             credit: in std_logic_vector(1 downto 0);
             grant_Y_N, grant_Y_E, grant_Y_W, grant_Y_S, grant_Y_L :out std_logic -- Grants given to LBDR requests (encoded as one-hot)
@@ -116,35 +117,35 @@ begin
 end process;
 
 -- The combionational part
-    grant_xbar_N_N <= grant_N_N_sig and not empty_N;
-    grant_xbar_N_E <= grant_N_E_sig and not empty_E;
-    grant_xbar_N_W <= grant_N_W_sig and not empty_W;
-    grant_xbar_N_S <= grant_N_S_sig and not empty_S;
-    grant_xbar_N_L <= grant_N_L_sig and not empty_L;
+    grant_xbar_N_N <= grant_N_N_sig and (not empty_N or fault_in_N);
+    grant_xbar_N_E <= grant_N_E_sig and (not empty_E or fault_in_N);
+    grant_xbar_N_W <= grant_N_W_sig and (not empty_W or fault_in_N);
+    grant_xbar_N_S <= grant_N_S_sig and (not empty_S or fault_in_N);
+    grant_xbar_N_L <= grant_N_L_sig and (not empty_L or fault_in_N);
 
-    grant_xbar_E_N <= grant_E_N_sig and not empty_N;
-    grant_xbar_E_E <= grant_E_E_sig and not empty_E;
-    grant_xbar_E_W <= grant_E_W_sig and not empty_W;
-    grant_xbar_E_S <= grant_E_S_sig and not empty_S;
-    grant_xbar_E_L <= grant_E_L_sig and not empty_L;
+    grant_xbar_E_N <= grant_E_N_sig and (not empty_N or fault_in_E);
+    grant_xbar_E_E <= grant_E_E_sig and (not empty_E or fault_in_E);
+    grant_xbar_E_W <= grant_E_W_sig and (not empty_W or fault_in_E);
+    grant_xbar_E_S <= grant_E_S_sig and (not empty_S or fault_in_E);
+    grant_xbar_E_L <= grant_E_L_sig and (not empty_L or fault_in_E);
 
-    grant_xbar_W_N <= grant_W_N_sig and not empty_N;
-    grant_xbar_W_E <= grant_W_E_sig and not empty_E;
-    grant_xbar_W_W <= grant_W_W_sig and not empty_W;
-    grant_xbar_W_S <= grant_W_S_sig and not empty_S;
-    grant_xbar_W_L <= grant_W_L_sig and not empty_L;
+    grant_xbar_W_N <= grant_W_N_sig and (not empty_N or fault_in_W);
+    grant_xbar_W_E <= grant_W_E_sig and (not empty_E or fault_in_W);
+    grant_xbar_W_W <= grant_W_W_sig and (not empty_W or fault_in_W);
+    grant_xbar_W_S <= grant_W_S_sig and (not empty_S or fault_in_W);
+    grant_xbar_W_L <= grant_W_L_sig and (not empty_L or fault_in_W);
 
-    grant_xbar_S_N <= grant_S_N_sig and not empty_N;
-    grant_xbar_S_E <= grant_S_E_sig and not empty_E;
-    grant_xbar_S_W <= grant_S_W_sig and not empty_W;
-    grant_xbar_S_S <= grant_S_S_sig and not empty_S;
-    grant_xbar_S_L <= grant_S_L_sig and not empty_L;
+    grant_xbar_S_N <= grant_S_N_sig and (not empty_N or fault_in_s);
+    grant_xbar_S_E <= grant_S_E_sig and (not empty_E or fault_in_s);
+    grant_xbar_S_W <= grant_S_W_sig and (not empty_W or fault_in_s);
+    grant_xbar_S_S <= grant_S_S_sig and (not empty_S or fault_in_s);
+    grant_xbar_S_L <= grant_S_L_sig and (not empty_L or fault_in_s);
 
-    grant_xbar_L_N <= grant_L_N_sig and not empty_N;
-    grant_xbar_L_E <= grant_L_E_sig and not empty_E;
-    grant_xbar_L_W <= grant_L_W_sig and not empty_W;
-    grant_xbar_L_S <= grant_L_S_sig and not empty_S;
-    grant_xbar_L_L <= grant_L_L_sig and not empty_L;
+    grant_xbar_L_N <= grant_L_N_sig and (not empty_N or fault_in_L);
+    grant_xbar_L_E <= grant_L_E_sig and (not empty_E or fault_in_L);
+    grant_xbar_L_W <= grant_L_W_sig and (not empty_W or fault_in_L);
+    grant_xbar_L_S <= grant_L_S_sig and (not empty_S or fault_in_L);
+    grant_xbar_L_L <= grant_L_L_sig and (not empty_L or fault_in_L);
 
     grant_N_N <= grant_N_N_sig and not empty_N and not fault_in_N;
     grant_N_E <= grant_N_E_sig and not empty_E and not fault_in_N;
@@ -259,7 +260,7 @@ arb_L_X: arbiter_in  PORT MAP (reset => reset, clk => clk,
                                X_N=>X_L_N, X_E=>X_L_E, X_W=>X_L_W, X_S=>X_L_S, X_L=>X_L_L);
 
 -- Y is N now
-arb_X_N: arbiter_out port map (reset => reset, clk => clk,
+arb_X_N: arbiter_out port map (reset => reset, clk => clk, fault_in => fault_in_N,
                                X_N_Y => X_N_N, X_E_Y => X_E_N,  X_W_Y => X_W_N,  X_S_Y => X_S_N,  X_L_Y => X_L_N,
                                credit => credit_counter_N_out,
                                grant_Y_N => grant_N_N_sig,
@@ -269,7 +270,7 @@ arb_X_N: arbiter_out port map (reset => reset, clk => clk,
                                grant_Y_L => grant_N_L_sig);
 
 -- Y is E now
-arb_X_E: arbiter_out port map (reset => reset, clk => clk,
+arb_X_E: arbiter_out port map (reset => reset, clk => clk, fault_in => fault_in_E,
                                X_N_Y => X_N_E, X_E_Y => X_E_E, X_W_Y => X_W_E, X_S_Y => X_S_E, X_L_Y => X_L_E,
                                credit => credit_counter_E_out,
                                grant_Y_N => grant_E_N_sig,
@@ -279,7 +280,7 @@ arb_X_E: arbiter_out port map (reset => reset, clk => clk,
                                grant_Y_L => grant_E_L_sig);
 
 -- Y is W now
-arb_X_W: arbiter_out port map (reset => reset, clk => clk,
+arb_X_W: arbiter_out port map (reset => reset, clk => clk, fault_in => fault_in_W,
                                X_N_Y => X_N_W, X_E_Y => X_E_W, X_W_Y => X_W_W, X_S_Y => X_S_W, X_L_Y => X_L_W,
                                credit => credit_counter_W_out,
                                grant_Y_N => grant_W_N_sig,
@@ -289,7 +290,7 @@ arb_X_W: arbiter_out port map (reset => reset, clk => clk,
                                grant_Y_L => grant_W_L_sig);
 
 -- Y is S now
-arb_X_S: arbiter_out port map (reset => reset, clk => clk,
+arb_X_S: arbiter_out port map (reset => reset, clk => clk, fault_in => fault_in_S,
                                X_N_Y => X_N_S, X_E_Y => X_E_S, X_W_Y => X_W_S, X_S_Y => X_S_S, X_L_Y => X_L_S,
                                credit => credit_counter_S_out,
                                grant_Y_N => grant_S_N_sig,
@@ -299,7 +300,7 @@ arb_X_S: arbiter_out port map (reset => reset, clk => clk,
                                grant_Y_L => grant_S_L_sig);
 
 -- Y is L now
-arb_X_L: arbiter_out port map (reset => reset, clk => clk,
+arb_X_L: arbiter_out port map (reset => reset, clk => clk, fault_in => fault_in_L,
                                X_N_Y => X_N_L, X_E_Y => X_E_L, X_W_Y => X_W_L, X_S_Y => X_S_L, X_L_Y => X_L_L,
                                credit => credit_counter_L_out,
                                grant_Y_N => grant_L_N_sig,

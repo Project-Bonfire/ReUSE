@@ -14,6 +14,7 @@ entity FIFO_credit_based is
             clk: in  std_logic;
             RX: in std_logic_vector(DATA_WIDTH-1 downto 0);
             valid_in: in std_logic;
+            fault_in: in std_logic;
             read_en_N : in std_logic;
             read_en_E : in std_logic;
             read_en_W : in std_logic;
@@ -22,8 +23,7 @@ entity FIFO_credit_based is
             credit_out: out std_logic;
             empty_out: out std_logic;
             fault_out: out std_logic;
-            Data_out:  out std_logic_vector(DATA_WIDTH-1 downto 0);
-            Data_out_prev: out std_logic_vector(DATA_WIDTH-1 downto 0)
+            Data_out:  out std_logic_vector(DATA_WIDTH-1 downto 0)
     );
 end FIFO_credit_based;
 
@@ -33,7 +33,7 @@ architecture behavior of FIFO_credit_based is
    signal full, empty: std_logic;
    signal read_en, write_en: std_logic;
    signal written_data: std_logic_vector(DATA_WIDTH-1 downto 0);
-
+   signal Data_out_current, Data_out_prev : std_logic_vector(DATA_WIDTH-1 downto 0);
    signal FIFO_MEM_1, FIFO_MEM_1_in : std_logic_vector(DATA_WIDTH-1 downto 0);
    signal FIFO_MEM_2, FIFO_MEM_2_in : std_logic_vector(DATA_WIDTH-1 downto 0);
    signal FIFO_MEM_3, FIFO_MEM_3_in : std_logic_vector(DATA_WIDTH-1 downto 0);
@@ -100,11 +100,11 @@ begin
 
   process(read_pointer, FIFO_MEM_1, FIFO_MEM_2, FIFO_MEM_3, FIFO_MEM_4)begin
     case( read_pointer ) is
-        when "0001" => Data_out <= FIFO_MEM_1;
-        when "0010" => Data_out <= FIFO_MEM_2;
-        when "0100" => Data_out <= FIFO_MEM_3;
-        when "1000" => Data_out <= FIFO_MEM_4;
-        when others => Data_out <= FIFO_MEM_1;
+        when "0001" => Data_out_current <= FIFO_MEM_1;
+        when "0010" => Data_out_current <= FIFO_MEM_2;
+        when "0100" => Data_out_current <= FIFO_MEM_3;
+        when "1000" => Data_out_current <= FIFO_MEM_4;
+        when others => Data_out_current <= FIFO_MEM_1;
     end case ;
   end process;
 
@@ -117,6 +117,15 @@ begin
         when "1000" => Data_out_prev <= FIFO_MEM_4;
         when others => Data_out_prev <= FIFO_MEM_1;
     end case ;
+  end process;
+
+
+  process(Data_out_prev, Data_out_current, fault_in) begin
+    if fault_in = '1' then
+      Data_out <= Data_out_prev;
+    else
+      Data_out <= Data_out_current;
+    end if;
   end process;
 
   process(write_pointer_prev, FIFO_MEM_1, FIFO_MEM_2, FIFO_MEM_3, FIFO_MEM_4)begin
@@ -141,7 +150,7 @@ begin
   fault_out <= fault;
 
   read_en <= (read_en_N or read_en_E or read_en_W or read_en_S or read_en_L) and not empty;
-  empty_out <= empty;
+  empty_out <= empty or fault;
 
  write_pointer_prev <= write_pointer(0) & write_pointer(3 downto 1);
 
@@ -166,22 +175,22 @@ begin
        end if;
   end process;
 
-  process(full, valid_in) begin
-     if valid_in = '1' and full ='0' then
+  process(full, valid_in, fault) begin
+     if (valid_in = '1' and full ='0') or fault='1' then
          write_en <= '1';
      else
          write_en <= '0';
      end if;
   end process;
 
-  process(write_pointer, read_pointer) begin
+  process(write_pointer_effective, read_pointer) begin
       if read_pointer = write_pointer  then
               empty <= '1';
       else
               empty <= '0';
       end if;
       --      if write_pointer = read_pointer>>1 then
-      if write_pointer = read_pointer(0)&read_pointer(3 downto 1) then
+      if write_pointer_effective = read_pointer(0)&read_pointer(3 downto 1) then
               full <= '1';
       else
               full <= '0';

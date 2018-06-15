@@ -7,6 +7,7 @@ use ieee.std_logic_1164.all;
 use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
 USE ieee.numeric_std.ALL;
+use ieee.std_logic_misc.all;
 
 use work.router_pack.all;
 
@@ -63,42 +64,44 @@ architecture behavior of router_credit_based is
     signal Req_NL, Req_EL, Req_WL, Req_SL, Req_LL: std_logic;
 
     signal empty_N, empty_E, empty_W, empty_S, empty_L: std_logic;
-
-
+    signal grants_for_N, grants_for_E, grants_for_W, grants_for_S, grants_for_L: std_logic_vector(4 downto 0);
+    signal fault_for_N, fault_for_E, fault_for_W, fault_for_S, fault_for_L:std_logic;
+    signal faults :std_logic_vector (4 downto 0);
     signal Xbar_sel_N, Xbar_sel_E, Xbar_sel_W, Xbar_sel_S, Xbar_sel_L: std_logic_vector(4 downto 0);
 begin
+
 ------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------
 -- all the FIFOs
 FIFO_N: FIFO_credit_based
     generic map ( DATA_WIDTH => DATA_WIDTH)
-    port map ( reset => reset, clk => clk, RX => RX_N, valid_in => valid_in_N,
+    port map ( reset => reset, clk => clk, RX => RX_N, valid_in => valid_in_N, fault_in => fault_for_N,
             read_en_N => '0', read_en_E =>Grant_EN, read_en_W =>Grant_WN, read_en_S =>Grant_SN, read_en_L =>Grant_LN,
-            credit_out => credit_out_N, empty_out => empty_N, fault_out => fault_out_N, Data_out => FIFO_D_out_N, Data_out_prev => FIFO_D_out_N_prev);
+            credit_out => credit_out_N, empty_out => empty_N, fault_out => fault_out_N, Data_out => FIFO_D_out_N);
 
 FIFO_E: FIFO_credit_based
     generic map ( DATA_WIDTH => DATA_WIDTH)
-    port map ( reset => reset, clk => clk, RX => RX_E, valid_in => valid_in_E,
+    port map ( reset => reset, clk => clk, RX => RX_E, valid_in => valid_in_E, fault_in => fault_for_E,
             read_en_N => Grant_NE, read_en_E =>'0', read_en_W =>Grant_WE, read_en_S =>Grant_SE, read_en_L =>Grant_LE,
-            credit_out => credit_out_E, empty_out => empty_E, fault_out => fault_out_E, Data_out => FIFO_D_out_E, Data_out_prev => FIFO_D_out_E_prev);
+            credit_out => credit_out_E, empty_out => empty_E, fault_out => fault_out_E, Data_out => FIFO_D_out_E);
 
 FIFO_W: FIFO_credit_based
     generic map ( DATA_WIDTH => DATA_WIDTH)
-    port map ( reset => reset, clk => clk, RX => RX_W, valid_in => valid_in_W,
+    port map ( reset => reset, clk => clk, RX => RX_W, valid_in => valid_in_W, fault_in => fault_for_W,
             read_en_N => Grant_NW, read_en_E =>Grant_EW, read_en_W =>'0', read_en_S =>Grant_SW, read_en_L =>Grant_LW,
-            credit_out => credit_out_W, empty_out => empty_W, fault_out => fault_out_W, Data_out => FIFO_D_out_W, Data_out_prev => FIFO_D_out_W_prev);
+            credit_out => credit_out_W, empty_out => empty_W, fault_out => fault_out_W, Data_out => FIFO_D_out_W);
 
 FIFO_S: FIFO_credit_based
     generic map ( DATA_WIDTH => DATA_WIDTH)
-    port map ( reset => reset, clk => clk, RX => RX_S, valid_in => valid_in_S,
+    port map ( reset => reset, clk => clk, RX => RX_S, valid_in => valid_in_S, fault_in => fault_for_S,
             read_en_N => Grant_NS, read_en_E =>Grant_ES, read_en_W =>Grant_WS, read_en_S =>'0', read_en_L =>Grant_LS,
-            credit_out => credit_out_S, empty_out => empty_S, fault_out => fault_out_S, Data_out => FIFO_D_out_S, Data_out_prev => FIFO_D_out_S_prev);
+            credit_out => credit_out_S, empty_out => empty_S, fault_out => fault_out_S, Data_out => FIFO_D_out_S);
 
 FIFO_L: FIFO_credit_based
     generic map ( DATA_WIDTH => DATA_WIDTH)
-    port map ( reset => reset, clk => clk, RX => RX_L, valid_in => valid_in_L,
+    port map ( reset => reset, clk => clk, RX => RX_L, valid_in => valid_in_L, fault_in => fault_for_L,
             read_en_N => Grant_NL, read_en_E =>Grant_EL, read_en_W =>Grant_WL, read_en_S => Grant_SL, read_en_L =>'0',
-            credit_out => credit_out_L, empty_out => empty_L, fault_out => fault_out_L, Data_out => FIFO_D_out_L, Data_out_prev => FIFO_D_out_L_prev);
+            credit_out => credit_out_L, empty_out => empty_L, fault_out => fault_out_L, Data_out => FIFO_D_out_L);
 ------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------
 
@@ -196,34 +199,37 @@ Xbar_sel_W <= Grant_xbar_WN & Grant_xbar_WE & '0' & Grant_xbar_WS & Grant_xbar_W
 Xbar_sel_S <= Grant_xbar_SN & Grant_xbar_SE & Grant_xbar_SW & '0' & Grant_xbar_SL;
 Xbar_sel_L <= Grant_xbar_LN & Grant_xbar_LE & Grant_xbar_LW & Grant_xbar_LS & '0';
 
+grants_for_N <= '0' & Grant_xbar_EN &  Grant_xbar_WN & Grant_xbar_SN & Grant_xbar_LN;
+grants_for_E <= Grant_xbar_NE & '0' &  Grant_xbar_WE & Grant_xbar_SE & Grant_xbar_LE;
+grants_for_W <= Grant_xbar_NW & Grant_xbar_EW &  '0' & Grant_xbar_SW & Grant_xbar_LW;
+grants_for_S <= Grant_xbar_NS & Grant_xbar_ES &  Grant_xbar_WS & '0' & Grant_xbar_LS;
+grants_for_L <= Grant_xbar_NL & Grant_xbar_EL &  Grant_xbar_WL & Grant_xbar_SL & '0';
 
+
+faults <= fault_in_N & fault_in_E & fault_in_W & fault_in_S & fault_in_L;
+
+fault_for_N <= or_reduce(grants_for_N and faults);
+fault_for_E <= or_reduce(grants_for_E and faults);
+fault_for_W <= or_reduce(grants_for_W and faults);
+fault_for_S <= or_reduce(grants_for_S and faults);
+fault_for_L <= or_reduce(grants_for_L and faults);
 ------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------
  -- all the Xbars
 XBAR_N: XBAR generic map (DATA_WIDTH  => DATA_WIDTH)
    PORT MAP (North_in => FIFO_D_out_N, East_in => FIFO_D_out_E, West_in => FIFO_D_out_W, South_in => FIFO_D_out_S, Local_in => FIFO_D_out_L,
-             North_in_prev => FIFO_D_out_N_prev, East_in_prev => FIFO_D_out_E_prev, West_in_prev => FIFO_D_out_W_prev, South_in_prev => FIFO_D_out_S_prev, Local_in_prev => FIFO_D_out_L_prev,
-             fault_in =>fault_in_N,
              sel => Xbar_sel_N,  Data_out=> TX_N);
 XBAR_E: XBAR generic map (DATA_WIDTH  => DATA_WIDTH)
    PORT MAP (North_in => FIFO_D_out_N, East_in => FIFO_D_out_E, West_in => FIFO_D_out_W, South_in => FIFO_D_out_S, Local_in => FIFO_D_out_L,
-             North_in_prev => FIFO_D_out_N_prev, East_in_prev => FIFO_D_out_E_prev, West_in_prev => FIFO_D_out_W_prev, South_in_prev => FIFO_D_out_S_prev, Local_in_prev => FIFO_D_out_L_prev,
-             fault_in =>fault_in_E,
             sel => Xbar_sel_E,  Data_out=> TX_E);
 XBAR_W: XBAR generic map (DATA_WIDTH  => DATA_WIDTH)
    PORT MAP (North_in => FIFO_D_out_N, East_in => FIFO_D_out_E, West_in => FIFO_D_out_W, South_in => FIFO_D_out_S, Local_in => FIFO_D_out_L,
-             North_in_prev => FIFO_D_out_N_prev, East_in_prev => FIFO_D_out_E_prev, West_in_prev => FIFO_D_out_W_prev, South_in_prev => FIFO_D_out_S_prev, Local_in_prev => FIFO_D_out_L_prev,
-             fault_in =>fault_in_W,
              sel => Xbar_sel_W,  Data_out=> TX_W);
 XBAR_S: XBAR generic map (DATA_WIDTH  => DATA_WIDTH)
    PORT MAP (North_in => FIFO_D_out_N, East_in => FIFO_D_out_E, West_in => FIFO_D_out_W, South_in => FIFO_D_out_S, Local_in => FIFO_D_out_L,
-             North_in_prev => FIFO_D_out_N_prev, East_in_prev => FIFO_D_out_E_prev, West_in_prev => FIFO_D_out_W_prev, South_in_prev => FIFO_D_out_S_prev, Local_in_prev => FIFO_D_out_L_prev,
-             fault_in =>fault_in_S,
              sel => Xbar_sel_S,  Data_out=> TX_S);
 XBAR_L: XBAR generic map (DATA_WIDTH  => DATA_WIDTH)
    PORT MAP (North_in => FIFO_D_out_N, East_in => FIFO_D_out_E, West_in => FIFO_D_out_W, South_in => FIFO_D_out_S, Local_in => FIFO_D_out_L,
-             North_in_prev => FIFO_D_out_N_prev, East_in_prev => FIFO_D_out_E_prev, West_in_prev => FIFO_D_out_W_prev, South_in_prev => FIFO_D_out_S_prev, Local_in_prev => FIFO_D_out_L_prev,
-             fault_in =>fault_in_L,
              sel => Xbar_sel_L,  Data_out=> TX_L);
 
 end;

@@ -15,17 +15,17 @@ def build_do_file(tb, fi_do, fault_free, rtl_prefix):
                           'vcom ../../RTL/Baseline_network_4x4_credit_based.vhd\n']
 
     rtl_files = ['vcom ../../' + rtl_prefix + 'Packages/router_pack.vhd\n',
-                 'vcom ../../' + rtl_prefix + 'RTL/base_line/arbiter_in.vhd\n',
-                 'vcom ../../' + rtl_prefix + 'RTL/base_line/arbiter_out.vhd\n',
-                 'vcom ../../' + rtl_prefix + 'RTL/base_line/allocator.vhd\n',
-                 'vcom ../../' + rtl_prefix + 'RTL/base_line/LBDR.vhd\n',
-                 'vcom ../../' + rtl_prefix + 'RTL/base_line/xbar.vhd\n',
-                 'vcom ../../' + rtl_prefix + 'RTL/base_line/NI.vhd\n',
-                 'vcom ../../' + rtl_prefix + 'RTL/base_line/Parity_checker_for_router_links.vhd\n',
-                 'vcom ../../' + rtl_prefix + 'RTL/base_line/FIFO_one_hot_credit_based.vhd\n',
-                 'vcom ../../' + rtl_prefix + 'RTL/base_line/Router_32_bit_credit_based.vhd\n',
+                 'vcom ../../' + rtl_prefix + 'RTL/arbiter_in.vhd\n',
+                 'vcom ../../' + rtl_prefix + 'RTL/arbiter_out.vhd\n',
+                 'vcom ../../' + rtl_prefix + 'RTL/allocator.vhd\n',
+                 'vcom ../../' + rtl_prefix + 'RTL/LBDR.vhd\n',
+                 'vcom ../../' + rtl_prefix + 'RTL/xbar.vhd\n',
+                 'vcom ../../' + rtl_prefix + 'RTL/NI.vhd\n',
+                 # 'vcom ../../' + rtl_prefix + 'RTL/Parity_checker_for_router_links.vhd\n',
+                 'vcom ../../' + rtl_prefix + 'RTL/FIFO_one_hot_credit_based.vhd\n',
+                 'vcom ../../' + rtl_prefix + 'RTL/Router_32_bit_credit_based.vhd\n',
                  'vcom ../../' + rtl_prefix + 'Packages/TB_Package_32_bit_credit_based_NI.vhd\n',
-                 'vcom ../../RTL/network_4x4_credit_based.vhd\n']
+                 'vcom ../../' + rtl_prefix + 'RTL/network_4x4_credit_based.vhd\n']
 
     with open(DO_FILE, 'w') as sim_do:
         sim_do.write('# Temporary simulation file for running the experiments\n')
@@ -51,7 +51,7 @@ def build_do_file(tb, fi_do, fault_free, rtl_prefix):
 
         if not fault_free:
             sim_do.write('# Fault injection\n')
-            sim_do.write('do ' + fi_do[3:] + '\n\n')
+            sim_do.write('do ' + fi_do + '\n\n')
             sim_do.write('run 100000 ns\n\n')
 
         else:

@@ -62,6 +62,7 @@ for i in range(0, CB_Package.network_dime_x*CB_Package.network_dime_y):
         noc_file.write("RX_N_"+str(i+CB_Package.network_dime_x)+"<= TX_S_"+str(i)+";\n")
         noc_file.write("RX_S_"+str(i)+"<= TX_N_"+str(i+CB_Package.network_dime_x)+";\n")
         noc_file.write("-------------------\n")
+
 noc_file.write("\n")
 noc_file.write("-- horizontal ins/outs\n")
 for i in range(0, CB_Package.network_dime_x*CB_Package.network_dime_y):
@@ -81,7 +82,20 @@ noc_file.write("---------------------------------------------------------------\
 noc_file.write("-- binding the routers together\n")
 
 for i in range(0, CB_Package.network_dime_x*CB_Package.network_dime_y):
+    node_x = i % CB_Package.network_dime_x
+    node_y = i / CB_Package.network_dime_x
     noc_file.write("fault_in_L_"+str(i)+" <= \'0\';\n")
+    if node_x == 0:
+        noc_file.write("fault_in_W_"+str(i)+" <= \'0\';\n")
+        
+    if node_y == 0:
+        noc_file.write("fault_in_N_"+str(i)+" <= \'0\';\n")
+
+    if node_x == CB_Package.network_dime_x-1:
+        noc_file.write("fault_in_E_"+str(i)+" <= \'0\';\n")
+
+    if node_y == CB_Package.network_dime_y-1:
+        noc_file.write("fault_in_S_"+str(i)+" <= \'0\';\n")
 
 for i in range(0, CB_Package.network_dime_x*CB_Package.network_dime_y):
     node_x = i % CB_Package.network_dime_x

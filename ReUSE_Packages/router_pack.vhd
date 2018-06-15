@@ -28,6 +28,7 @@ package router_pack is
             clk: in  std_logic;
             RX: in std_logic_vector(DATA_WIDTH-1 downto 0);
             valid_in: in std_logic;
+            fault_in: in std_logic;
             read_en_N : in std_logic;
             read_en_E : in std_logic;
             read_en_W : in std_logic;
@@ -36,8 +37,7 @@ package router_pack is
             credit_out: out std_logic;
             empty_out: out std_logic;
             fault_out: out std_logic;
-            Data_out: out std_logic_vector(DATA_WIDTH-1 downto 0);
-            Data_out_prev: out std_logic_vector(DATA_WIDTH-1 downto 0)
+            Data_out:  out std_logic_vector(DATA_WIDTH-1 downto 0)
     );
   end COMPONENT;
 
@@ -100,14 +100,6 @@ end COMPONENT;
         West_in: in std_logic_vector(DATA_WIDTH-1 downto 0);
         South_in: in std_logic_vector(DATA_WIDTH-1 downto 0);
         Local_in: in std_logic_vector(DATA_WIDTH-1 downto 0);
-        North_in_prev: in std_logic_vector(DATA_WIDTH-1 downto 0);
-        East_in_prev : in std_logic_vector(DATA_WIDTH-1 downto 0);
-        West_in_prev : in std_logic_vector(DATA_WIDTH-1 downto 0);
-        South_in_prev: in std_logic_vector(DATA_WIDTH-1 downto 0);
-        Local_in_prev: in std_logic_vector(DATA_WIDTH-1 downto 0);
-
-        fault_in: in std_logic;
-
         sel: in std_logic_vector (4 downto 0);
         Data_out: out std_logic_vector(DATA_WIDTH-1 downto 0)
     );
