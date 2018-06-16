@@ -5,24 +5,27 @@
 vlib work
 
 # Include RTL files and compile them
-vcom ../../ReUSE_Packages/router_pack.vhd
-vcom ../../ReUSE_RTL/arbiter_in.vhd
-vcom ../../ReUSE_RTL/arbiter_out.vhd
-vcom ../../ReUSE_RTL/allocator.vhd
-vcom ../../ReUSE_RTL/LBDR.vhd
-vcom ../../ReUSE_RTL/xbar.vhd
-vcom ../../ReUSE_RTL/NI.vhd
-vcom ../../ReUSE_RTL/FIFO_one_hot_credit_based.vhd
-vcom ../../ReUSE_RTL/Router_32_bit_credit_based.vhd
-vcom ../../ReUSE_Packages/TB_Package_32_bit_credit_based_NI.vhd
-vcom ../../ReUSE_RTL/network_4x4_credit_based.vhd
+vcom ../../Baseline_Packages/router_pack.vhd
+vcom ../../Baseline_RTL/base_line/arbiter_in.vhd
+vcom ../../Baseline_RTL/base_line/arbiter_out.vhd
+vcom ../../Baseline_RTL/base_line/allocator.vhd
+vcom ../../Baseline_RTL/base_line/LBDR.vhd
+vcom ../../Baseline_RTL/base_line/xbar.vhd
+vcom ../../Baseline_RTL/base_line/NI.vhd
+vcom ../../Baseline_RTL/base_line/FIFO_one_hot_credit_based.vhd
+vcom ../../Baseline_RTL/base_line/Router_32_bit_credit_based.vhd
+vcom ../../Baseline_Packages/TB_Package_32_bit_credit_based_NI.vhd
+vcom ../../Baseline_RTL/network_4x4_credit_based.vhd
 
 # Testbench
-vcom ../../experiments/TB_vhdl/network_4x4_Rand_credit_based_1050_tb.vhd
+vcom ../../experiments/TB_vhdl/network_4x4_Rand_credit_based_150_tb.vhd
 
 # Start the simulation
 vsim work.tb_network_4x4 -suppress 8780
 
-run 200000 ns
+# Fault injection
+do ../../experiments/FI/FI_20ns/fault_inject_600k.do
+
+run 100000 ns
 
 quit -f

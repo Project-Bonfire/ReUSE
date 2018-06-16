@@ -11,8 +11,8 @@ def build_do_file(tb, fi_do, fault_free, rtl_prefix):
                           'vcom ../../Baseline_RTL/base_line/NI.vhd\n',
                           'vcom ../../Baseline_RTL/base_line/FIFO_one_hot_credit_based.vhd\n',
                           'vcom ../../Baseline_RTL/base_line/Router_32_bit_credit_based.vhd\n',
-                          'vcom ../../Packages/TB_Package_32_bit_credit_based_NI.vhd\n',
-                          'vcom ../../RTL/Baseline_network_4x4_credit_based.vhd\n']
+                          'vcom ../../Baseline_Packages/TB_Package_32_bit_credit_based_NI.vhd\n',
+                          'vcom ../../Baseline_RTL/network_4x4_credit_based.vhd\n']
 
     rtl_files = ['vcom ../../' + rtl_prefix + 'Packages/router_pack.vhd\n',
                  'vcom ../../' + rtl_prefix + 'RTL/arbiter_in.vhd\n',

@@ -10,12 +10,12 @@ from subprocess import Popen, PIPE
 from build_do_file import build_do_file
 from calculate_latency import calculate_latency
 
-FI_FOLDER = 'FI_1ns_large' # Name of the fault injection folder to use
-RTL_PREFIX = 'ReUSE_' # Run experiments on fault tolerant router
-# RTL_PREFIX = 'Baseline_' # Run experiments on baseline router
+FI_FOLDER = 'FI_1ns' # Name of the fault injection folder to use
+# RTL_PREFIX = 'ReUSE_' # Run experiments on fault tolerant router
+RTL_PREFIX = 'Baseline_' # Run experiments on baseline router
 
-FAULT_FREE = True # Also do a fault free run
-DEBUG = True # Run only one experiment. For debugging
+FAULT_FREE = False # Also do a fault free run
+DEBUG = False # Run only one experiment. For debugging
 SENT_FILE_PATH = '../../tmp/simul_temp/sent.txt'
 RECV_FILE_PATH = '../../tmp/simul_temp/received.txt'
 

@@ -1,43 +1,55 @@
 #################################
-run 76526ns
-force -drive sim/:tb_network_4x4:NoC:R_15:RX_W(31) 0 1267.6ns -cancel 1287.6ns
-run 1526ns
-force -drive sim/:tb_network_4x4:NoC:R_6:RX_S(16) 0 6666.4ns -cancel 6686.4ns
-run 392ns
-force -drive sim/:tb_network_4x4:NoC:R_8:RX_S(29) 1 1061.5ns -cancel 1081.5ns
-run 2478ns
-force -drive sim/:tb_network_4x4:NoC:R_14:RX_E(21) 1 4045.8ns -cancel 4065.8ns
-run 2762ns
-force -drive sim/:tb_network_4x4:NoC:R_2:RX_S(1) 1 7740.6ns -cancel 7760.6ns
-run 1028ns
-force -drive sim/:tb_network_4x4:NoC:R_11:RX_S(18) 1 9087.5ns -cancel 9107.5ns
-run 835ns
-force -drive sim/:tb_network_4x4:NoC:R_10:RX_E(10) 0 165.9ns -cancel 185.9ns
-run 689ns
-force -drive sim/:tb_network_4x4:NoC:R_3:RX_W(15) 1 6687.7ns -cancel 6707.7ns
-run 2619ns
-force -drive sim/:tb_network_4x4:NoC:R_4:RX_E(5) 0 4502.3ns -cancel 4522.3ns
-run 79ns
-force -drive sim/:tb_network_4x4:NoC:R_4:RX_S(18) 0 4099.6ns -cancel 4119.6ns
-run 737ns
-force -drive sim/:tb_network_4x4:NoC:R_14:RX_W(27) 1 7499.7ns -cancel 7519.7ns
-run 866ns
-force -drive sim/:tb_network_4x4:NoC:R_5:RX_E(7) 0 8472.7ns -cancel 8492.7ns
-run 988ns
-force -drive sim/:tb_network_4x4:NoC:R_13:RX_E(16) 1 8988.2ns -cancel 9008.2ns
-run 3739ns
-force -drive sim/:tb_network_4x4:NoC:R_8:RX_E(13) 0 5357.9ns -cancel 5377.9ns
-run 5ns
-force -drive sim/:tb_network_4x4:NoC:R_11:RX_N(13) 1 8843.8ns -cancel 8863.8ns
-run 11ns
-force -drive sim/:tb_network_4x4:NoC:R_11:RX_W(28) 1 3919.7ns -cancel 3939.7ns
-run 6ns
-force -drive sim/:tb_network_4x4:NoC:R_1:RX_S(17) 1 6136.3ns -cancel 6156.3ns
-run 275ns
-force -drive sim/:tb_network_4x4:NoC:R_1:RX_E(6) 1 4098.9ns -cancel 4118.9ns
-run 1330ns
-force -drive sim/:tb_network_4x4:NoC:R_9:RX_W(4) 0 3484.6ns -cancel 3504.6ns
-run 891ns
-force -drive sim/:tb_network_4x4:NoC:R_4:RX_N(31) 0 6729.4ns -cancel 6749.4ns
+run 62294ns
+force -drive sim/:tb_network_4x4:NoC:R_4:RX_S(0) 0 5875.0ns -cancel 5895.0ns
+run 8314ns
+force -drive sim/:tb_network_4x4:NoC:R_0:RX_E(18) 1 8722.4ns -cancel 8742.4ns
+run 6348ns
+force -drive sim/:tb_network_4x4:NoC:R_10:RX_W(1) 0 545.3ns -cancel 565.3ns
+run 2530ns
+force -drive sim/:tb_network_4x4:NoC:R_15:RX_W(9) 0 1764.6ns -cancel 1784.6ns
+run 3499ns
+force -drive sim/:tb_network_4x4:NoC:R_9:RX_E(28) 1 9114.0ns -cancel 9134.0ns
+run 1948ns
+force -drive sim/:tb_network_4x4:NoC:R_13:RX_N(4) 1 7880.5ns -cancel 7900.5ns
+run 2544ns
+force -drive sim/:tb_network_4x4:NoC:R_3:RX_W(17) 0 5283.6ns -cancel 5303.6ns
+run 84ns
+force -drive sim/:tb_network_4x4:NoC:R_7:RX_N(0) 1 1724.1ns -cancel 1744.1ns
+run 344ns
+force -drive sim/:tb_network_4x4:NoC:R_4:RX_E(24) 0 4310.9ns -cancel 4330.9ns
+run 600ns
+force -drive sim/:tb_network_4x4:NoC:R_0:RX_S(23) 0 8402.0ns -cancel 8422.0ns
+run 202ns
+force -drive sim/:tb_network_4x4:NoC:R_15:RX_N(0) 0 827.6ns -cancel 847.6ns
+run 43ns
+force -drive sim/:tb_network_4x4:NoC:R_12:RX_E(28) 1 1356.8ns -cancel 1376.8ns
+run 1739ns
+force -drive sim/:tb_network_4x4:NoC:R_5:RX_N(12) 1 1685.2ns -cancel 1705.2ns
+run 442ns
+force -drive sim/:tb_network_4x4:NoC:R_13:RX_E(31) 1 6960.1ns -cancel 6980.1ns
+run 525ns
+force -drive sim/:tb_network_4x4:NoC:R_10:RX_E(15) 1 7166.9ns -cancel 7186.9ns
+run 257ns
+force -drive sim/:tb_network_4x4:NoC:R_6:RX_W(16) 1 5497.0ns -cancel 5517.0ns
+run 54ns
+force -drive sim/:tb_network_4x4:NoC:R_2:RX_E(21) 0 5388.8ns -cancel 5408.8ns
+run 158ns
+force -drive sim/:tb_network_4x4:NoC:R_7:RX_W(11) 0 5745.8ns -cancel 5765.8ns
+run 1258ns
+force -drive sim/:tb_network_4x4:NoC:R_10:RX_N(2) 1 4386.0ns -cancel 4406.0ns
+run 595ns
+force -drive sim/:tb_network_4x4:NoC:R_1:RX_S(12) 0 709.0ns -cancel 729.0ns
+run 557ns
+force -drive sim/:tb_network_4x4:NoC:R_7:RX_S(2) 1 9020.7ns -cancel 9040.7ns
+run 400ns
+force -drive sim/:tb_network_4x4:NoC:R_11:RX_W(23) 0 2437.4ns -cancel 2457.4ns
+run 2502ns
+force -drive sim/:tb_network_4x4:NoC:R_9:RX_W(12) 0 2729.2ns -cancel 2749.2ns
+run 923ns
+force -drive sim/:tb_network_4x4:NoC:R_10:RX_S(30) 1 384.8ns -cancel 404.8ns
+run 15ns
+force -drive sim/:tb_network_4x4:NoC:R_8:RX_E(16) 1 5229.5ns -cancel 5249.5ns
+run 161ns
+force -drive sim/:tb_network_4x4:NoC:R_11:RX_S(6) 1 5033.0ns -cancel 5053.0ns
 run 10000ns
 stop
