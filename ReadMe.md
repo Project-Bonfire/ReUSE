@@ -14,3 +14,12 @@ People involved in this project:
 - Siavoosh Payandeh Azad
 - Behrad Niazmand
 - Karl Janson
+
+
+# FI Generation:
+
+All parameters needed for FI generation can be found in scripts/include/package.py file.
+
+To run the generation, run the following command. Modelsim environment might be required (not tested without it..):
+
+python simulate.py -D 4 -credit_based_FC -FC -FI -Rand 0.1 -PS 8 8 -sim 100000 -end 110000
