@@ -18,7 +18,7 @@ from Scripts.include.stats import statistics
 
 try:
     from Scripts.include.viz_traffic import viz_traffic
-    Viz = False
+    Viz = True
 except:
     print_msg(MSG_INFO, "Can not include the visualizer! Some library is missing. Turning off the visualization!")
     Viz = False
@@ -65,11 +65,14 @@ def main(argv):
     DEBUG = package.program_argv['debug']
     report_parogram_arguments(package.program_argv, DEBUG)
 
-    flow_control_type = package.CREDIT_BASED_SUFFIX
+    if package.program_argv['credit_based_FC']:
+        flow_control_type = package.CREDIT_BASED_SUFFIX
+
     net_file_name, net_tb_file_name = gen_network_and_tb(package.program_argv, flow_control_type)
 
     # Generate wave.do
     wave_do_file_name = gen_wave_do(package.program_argv, flow_control_type)
+
     # Generate simulate.do
     if DEBUG: print_msg(MSG_DEBUG, "Generating simulation.do")
 
@@ -82,9 +85,12 @@ def main(argv):
     # Running modelsim
     if DEBUG: print_msg(MSG_DEBUG, "Running Modelsim...")
 
+    sys.exit(0)
+
     os.chdir(package.SIMUL_DIR)
     if package.program_argv['command-line'] or package.program_argv['lat']:
-        return_value = os.system("vsim -c " + "-do " + package.SIMUL_DO_SCRIPT)
+        novopt = '-novopt ' if package.program_argv['verilog'] else ''
+        return_value = os.system("vsim -c " + novopt + "-do " + package.SIMUL_DO_SCRIPT)
     else:
         return_value = os.system("vsim -do " + package.SIMUL_DO_SCRIPT)
 
@@ -97,24 +103,23 @@ def main(argv):
     logging.info('starting latency calculation...')
     if package.program_argv['lat']:
         # Read sent packets
-        statistics(False)
+        statistics(True)
+
         # Run latency calculation script
-        latency_command = "python " + package.SCRIPTS_DIR + "/include/" +\
-                           package.LATENCY_CALCULATION_PATH + " -S " +\
-                           package.SIMUL_DIR+"/"+package.SENT_TXT_PATH +\
-                           " -R " + package.SIMUL_DIR+"/"+\
-                           package.RECEIVED_TXT_PATH
-        if DEBUG:
-            print_msg(MSG_DEBUG, "Running latency calculator script:\n\t" +\
-                      latency_command)
+        latency_command = "python " + package.SCRIPTS_DIR + "/include/" + package.LATENCY_CALCULATION_PATH + " -S " + package.SIMUL_DIR+"/"+package.SENT_TXT_PATH + " -R " + package.SIMUL_DIR+"/"+package.RECEIVED_TXT_PATH
+
+
+        if DEBUG: print_msg(MSG_DEBUG, "Running latency calculator script:\n\t" + latency_command)
+
         return_value = os.system(latency_command)
         if return_value != 0:
             print_msg(MSG_ERROR, "Error while running latency calculation script")
             sys.exit(1)
+
     else:
         statistics(False)
 
-    if Viz == True:
+    if package.program_argv["trace"] and Viz == True:
         viz_traffic(package.program_argv["network_dime"])
 
     logging.info('Logging finished...')

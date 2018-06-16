@@ -19,9 +19,12 @@ TRACE_DIR = SIMUL_DIR+ "/traces"
 
 # Subfolders
 SCRIPTS_DIR = PROJECT_ROOT + "/Scripts"
-ROUTER_RTL_DIR = PROJECT_ROOT+"/RTL/base_line"
-ROUTER_VC_RTL_DIR = PROJECT_ROOT+"/RTL/virtual_channel"
-TEST_DIR = PROJECT_ROOT + "/Packages"
+TEST_DIR = PROJECT_ROOT + "/Test"
+ROUTER_RTL_DIR = PROJECT_ROOT + "/RTL/Router"
+IMMORTAL_CHIP_DIR = PROJECT_ROOT + "/RTL/Chip_Designs/archive/IMMORTAL_Chip_2017/With_checkers"
+IMMORTAL_CHIP_FI_DIR = PROJECT_ROOT + "/RTL/Chip_Designs/IMMORTAL_Chip_2017/network_files"
+FAULT_MANAGEMENT_RTL_DIR = PROJECT_ROOT + "/RTL/Fault_Management"
+CHECKERS_DIR = "/Checkers/Modules_with_checkers_integrated/All_checkers"
 
 
 # Flow control suffixes
@@ -38,19 +41,75 @@ LATENCY_CALCULATION_PATH = "calculate_latency.py"
 
 # Default simulation configuration
 program_argv = {
-        'network_dime_x':     4,
-        'network_dime_y':     4,
-        'vc':                -1,
-        'rand':              -1,
-        'BR':                -1,
-        'PS':                [3,8],
-        'sim':               -1,
-        'end':               -1,
-        'lat':               False,
-        'debug':             False,
-        'trace':             False,
-        'command-line':      False,
+        'network_dime':    4,
+        'credit_based_FC': False,
+        'add_parity':      False,
+        'add_checkers':    False,
+        'packet_drop':     False,
+        'add_NI':          -1,
+        'NI_Test':         False,
+        'add_FI':          False,
+        'add_FC':          False,
+        'add_FO':          False,
+        'add_SHMU':        False,
+        'rand':            -1,
+        'BR':              -1,
+        'PS':              [3,8],
+        'sim':             -1,
+        'end':             -1,
+        'lat':             False,
+        'debug':           False,
+        'trace':           False,
+        'verilog':         False,
+        'command-line':    False,
     }
 
 # Debug mode is off by default
 DEBUG = False
+
+# fault injection settings
+FAULT_RANDOM_SEED = None        # set to None if you want random randomness
+
+FAULT_GENERATION = True
+
+FAULT_LENGTH = 20 # In ns
+
+# FILE_GEN_PATH = '/home/karl/git/ReUSE/experiments/FI/FI_' + str(FAULT_LENGTH) + 'ns/'
+FILE_GEN_PATH = '/home/karl/git/ReUSE/experiments/FI/FI_' + str(FAULT_LENGTH) + 'ns_large/'
+
+
+# Short values
+# fault_per_second_list = [
+# 10000,
+# 50000,
+# 100000,
+# 200000,
+# 300000,
+# 400000,
+# 500000,
+# 600000,
+# 700000,
+# 800000,
+# 900000,
+# 1000000
+# ]
+
+# Long values
+fault_per_second_list = [
+5000000,
+10000000,
+20000000,
+30000000,
+40000000,
+50000000,
+60000000,
+70000000,
+80000000
+]
+
+HIGH_FAULT_RATE = 1.1
+MEDIUM_FAULT_RATE = 1
+LOW_FAULT_RATE = 0.9
+
+MTB_INTERMITTENT_BURST = 100   # mean time between intermittent fault bursts
+EVENTS_PER_BURST = 10
