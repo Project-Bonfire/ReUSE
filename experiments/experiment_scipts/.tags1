@@ -1,0 +1,16 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	0	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+FI_FOLDER	/home/karl/git/ReUSE/experiments/experiment_scipts/run_experiments.py	/^FI_FOLDER = 'FI_1ns_large' # Name of the fault injection folder to use$/;"	variable	line:13
+RTL_PREFIX	/home/karl/git/ReUSE/experiments/experiment_scipts/run_experiments.py	/^RTL_PREFIX = 'ReUSE_' # Run experiments on fault tolerant router$/;"	variable	line:14
+FAULT_FREE	/home/karl/git/ReUSE/experiments/experiment_scipts/run_experiments.py	/^FAULT_FREE = True # Also do a fault free run$/;"	variable	line:17
+DEBUG	/home/karl/git/ReUSE/experiments/experiment_scipts/run_experiments.py	/^DEBUG = False # Run only one experiment. For debugging$/;"	variable	line:18
+SENT_FILE_PATH	/home/karl/git/ReUSE/experiments/experiment_scipts/run_experiments.py	/^SENT_FILE_PATH = '..\/..\/tmp\/simul_temp\/sent.txt'$/;"	variable	line:19
+RECV_FILE_PATH	/home/karl/git/ReUSE/experiments/experiment_scipts/run_experiments.py	/^RECV_FILE_PATH = '..\/..\/tmp\/simul_temp\/received.txt'$/;"	variable	line:20
+log_results	/home/karl/git/ReUSE/experiments/experiment_scipts/run_experiments.py	/^def log_results(results_file, frame_size, fi_rate, latency, design_broken):$/;"	function	line:22
+execute_modelsim	/home/karl/git/ReUSE/experiments/experiment_scipts/run_experiments.py	/^def execute_modelsim(do_file):$/;"	function	line:49
+run_experiment	/home/karl/git/ReUSE/experiments/experiment_scipts/run_experiments.py	/^def run_experiment(tb, fi_do, frame_size, fi_rate, fault_free):$/;"	function	line:74
+main	/home/karl/git/ReUSE/experiments/experiment_scipts/run_experiments.py	/^def main():$/;"	function	line:115
